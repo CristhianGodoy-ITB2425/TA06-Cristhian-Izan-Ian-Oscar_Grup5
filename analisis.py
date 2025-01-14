@@ -46,7 +46,7 @@ def validar_format(formats):
     return errors
 
 # Function to clean and combine data
-def netejar_fitxers(fitxers, delimitador, columnes_esperades):
+def netejar_fitxers(fitxers, delimitador, columnes_esperades, tipus_dades_esperats):
     dades_combinades = []
     for fitxer in fitxers:
         try:
@@ -56,6 +56,13 @@ def netejar_fitxers(fitxers, delimitador, columnes_esperades):
                 continue
             # Replace missing values (-999) with NaN
             df.replace(-999, pd.NA, inplace=True)
+            # Ensure data types are consistent
+            for col, tipus in tipus_dades_esperats.items():
+                if df[col].dtype != tipus:
+                    print(f"Tipus de dada diferent a {fitxer} per la columna {col}: {df[col].dtype} != {tipus}")
+                    continue
+            # Handle missing or corrupt values
+            df.dropna(inplace=True)
             dades_combinades.append(df)
         except Exception as e:
             print(f"Error llegint el fitxer {fitxer}: {e}")
@@ -82,7 +89,8 @@ if __name__ == "__main__":
     # Step 3: Clean and combine data
     delimitador = formats[0][1]  # Assume all have the same format
     columnes_esperades = formats[0][3]
-    dades = netejar_fitxers(fitxers, delimitador, columnes_esperades)
+    tipus_dades_esperats = formats[0][5]
+    dades = netejar_fitxers(fitxers, delimitador, columnes_esperades, tipus_dades_esperats)
 
     # Show combined data
     print(dades)
