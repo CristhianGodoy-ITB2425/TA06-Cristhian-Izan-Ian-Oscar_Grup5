@@ -86,3 +86,52 @@ if __name__ == "__main__":
 
     # Show combined data
     print(dades)
+
+# Additional implementation to verify that all files have the same format
+def revisar_format(fitxers):
+    formats = []
+    for fitxer in fitxers:
+        try:
+            with open(fitxer, 'r') as f:
+                primera_linia = f.readline()
+                if ',' in primera_linia:
+                    delimitador = ','
+                elif '\t' in primera_linia:
+                    delimitador = '\t'
+                elif ' ' in primera_linia:
+                    delimitador = ' '
+                else:
+                    delimitador = None
+
+                columnes = primera_linia.strip().split(delimitador)
+                formats.append((fitxer, delimitador, len(columnes), columnes))
+        except Exception as e:
+            print(f"Error llegint el fitxer {fitxer}: {e}")
+    return formats
+
+# Function to validate formats
+def validar_format_basica(formats):
+    primer_format = formats[0]
+    errors = []
+    for fitxer, delimitador, n_columnes, columnes in formats:
+        if delimitador != primer_format[1] or n_columnes != primer_format[2]:
+            errors.append(f"Format diferent a {fitxer}")
+    return errors
+
+# Main execution for basic validation
+if __name__ == "__main__":
+    # List of files in the PRECIPITACIONS folder
+    fitxers = glob.glob("PRECIPITACIONS/*.dat")
+
+    # Step 1: Review formats
+    formats = revisar_format(fitxers)
+    for fitxer, delimitador, n_columnes, columnes in formats:
+        print(f"{fitxer}: Delimitador={delimitador}, NColumnes={n_columnes}, Columnes={columnes}")
+
+    # Step 2: Validate formats
+    errors = validar_format_basica(formats)
+    if errors:
+        print("Errors de format:")
+        print("\n".join(errors))
+    else:
+        print("Tots els fitxers tenen el mateix format.")
