@@ -2,7 +2,7 @@ import os
 import re
 
 # Ruta de la carpeta PRECIPITACIONS
-carpeta = "/home/cristhian.godoy.7e6/PycharmProjects/TA06-Cristhian-Izan-Ian-Oscar_Grup5/PRECIPITACIONS"
+carpeta = "./PRECIPITACIONS"
 extensio = ".dat"
 fitxer_errors = "Error_log.log"
 
