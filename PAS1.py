@@ -9,6 +9,21 @@ folder_path = "PRECIPITACIONS"
 # Ruta del archivo de log de errores
 error_log_path = "Error_log.log"
 
+# Función para determinar el delimitador
+def determinar_delimitador(linea):
+    if ',' in linea:
+        return ','
+    elif '\t' in linea:
+        return '\t'
+    elif ' ' in linea:
+        return ' '
+    else:
+        return None
+
+# Función para comparar filas
+def comparar_filas(fila1, fila2):
+    return fila1 == fila2
+
 # Abrir el archivo de log de errores en modo de escritura
 with open(error_log_path, 'w') as error_log:
     # Recorrer todos los archivos en la carpeta
@@ -25,3 +40,4 @@ with open(error_log_path, 'w') as error_log:
                     error_message = f"{filename}: Cabecera incorrecta\n"
                     print(error_message.strip())
                     error_log.write(error_message)
+
