@@ -1,8 +1,9 @@
 import os
 import re
+from datetime import datetime
 
 # Ruta de la carpeta PRECIPITACIONS
-carpeta = "./Precipitacions_prova"
+carpeta = "./prova"
 extensio = ".dat"
 
 # Fitxer de log d'errors
@@ -23,7 +24,7 @@ def validar_format_linia(linia, numero_linia):
     elif numero_linia == 2:
         return bool(patro_segona_linia.match(linia))
     else:
-        return bool(patro_linia_dades.match(linia))
+        return bool(patro_linia_dades.match(linia)) and '  ' not in linia
 
 # Funció per validar la seqüència de les dades
 def validar_sequencia(linies):
@@ -70,7 +71,7 @@ with open(fitxer_errors, 'w') as log:
                 for i, linia in enumerate(linies, start=1):
                     linia = linia.strip()
                     if not validar_format_linia(linia, i):
-                        error_msg = f"Fitxer {arxiu}: Error al format de la línia {i} - {linia}"
+                        error_msg = f"{datetime.now()}: Fitxer {arxiu}: Error al format de la línia {i} - {linia}"
                         log.write(error_msg + "\n")
                         errors.append(error_msg)
                         break
@@ -78,14 +79,14 @@ with open(fitxer_errors, 'w') as log:
                 # Validar la seqüència de les dades
                 error_sequencia = validar_sequencia(linies)
                 if error_sequencia:
-                    log.write(f"Fitxer {arxiu}: {error_sequencia}\n")
-                    errors.append(f"Fitxer {arxiu}: {error_sequencia}")
+                    log.write(f"{datetime.now()}: Fitxer {arxiu}: {error_sequencia}\n")
+                    errors.append(f"{datetime.now()}: Fitxer {arxiu}: {error_sequencia}")
 
                 # Si totes les línies són correctes
                 else:
                     print(f"Fitxer {arxiu}: Format correcte.")
             except Exception as e:
-                error_msg = f"Fitxer {arxiu}: Error al llegir el fitxer - {e}"
+                error_msg = f"{datetime.now()}: Fitxer {arxiu}: Error al llegir el fitxer - {e}"
                 log.write(error_msg + "\n")
                 errors.append(error_msg)
 
