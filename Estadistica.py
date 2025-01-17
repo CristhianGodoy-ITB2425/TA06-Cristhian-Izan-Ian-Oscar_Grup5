@@ -2,7 +2,7 @@ import os
 import numpy as np
 
 # Ruta de la carpeta
-folder_path = "Precipitacions_prova"
+folder_path = "./PRECIPITACIONS"
 
 # Función para procesar las líneas de datos
 def procesar_lineas(lineas):
