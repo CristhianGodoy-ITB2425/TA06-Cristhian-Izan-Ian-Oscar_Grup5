@@ -3,7 +3,7 @@ import re
 from datetime import datetime
 
 # Ruta de la carpeta PRECIPITACIONS
-carpeta = "./prova"
+carpeta = "./PRECIPITACIONS"
 extensio = ".dat"
 
 # Fitxer de log d'errors
