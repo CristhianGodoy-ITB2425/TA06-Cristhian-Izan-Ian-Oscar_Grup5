@@ -41,6 +41,9 @@ def validar_sequencia(linies):
         elif actual_primer_apartat != primer_apartat:
             return f"Error: El primer apartat canvia a la línia {i} - {linia.strip()}"
 
+        if actual_mes < 1 or actual_mes > 12:
+            return f"Error: Mes invàlid a la línia {i} - {linia.strip()}"
+
         if any_mes_anterior is not None:
             anterior_any, anterior_mes = any_mes_anterior
             if actual_any < anterior_any or (actual_any == anterior_any and actual_mes != anterior_mes + 1):
