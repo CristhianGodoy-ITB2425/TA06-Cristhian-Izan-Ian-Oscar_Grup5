@@ -1,5 +1,6 @@
 import os
 import re
+from datetime import datetime
 
 # Ruta de la carpeta PRECIPITACIONS
 carpeta = "./Precipitacions_prova"
@@ -12,23 +13,17 @@ fitxer_errors = "Error_log.log"
 errors = []
 
 # Patrons per validar línies
-patro_primera_linia = re.compile(r'^precip\s+\S+\s+\S+\s+\S+\s+\S+\s+\d+$')
-patro_segona_linia = re.compile(r'^P\d+\s+[\d.-]+\s+[\d.-]+\s+\d+\s+\S+\s+\d+\s+\d+\s+[\d-]+$')
-patro_linia_dades = re.compile(r'^P\d+\s+\d+\s+\d+\s+(-?\d+\s+)*-?\d+$')
+patro_linia_dades = re.compile(r'^P\d+\s+\d+\s+\d+\s+(-?\d+\s+){30}-?\d+$')
 
 # Funció per validar el format de les línies
-def validar_format_linia(linia, numero_linia):
-    if numero_linia == 1:
-        return bool(patro_primera_linia.match(linia))
-    elif numero_linia == 2:
-        return bool(patro_segona_linia.match(linia))
-    else:
-        return bool(patro_linia_dades.match(linia))
+def validar_format_linia(linia):
+    return bool(patro_linia_dades.match(linia))
 
 # Funció per validar la seqüència de les dades
 def validar_sequencia(linies):
     primer_apartat = None
     any_mes_anterior = None
+    mesos_presentats = set()
 
     for i, linia in enumerate(linies[2:], start=3):
         parts = linia.strip().split()
@@ -41,12 +36,20 @@ def validar_sequencia(linies):
         elif actual_primer_apartat != primer_apartat:
             return f"Error: El primer apartat canvia a la línia {i} - {linia.strip()}"
 
+        if actual_mes < 1 or actual_mes > 12:
+            return f"Error: Mes fora de rang a la línia {i} - {linia.strip()}"
+
+        mesos_presentats.add(actual_mes)
+
         if any_mes_anterior is not None:
             anterior_any, anterior_mes = any_mes_anterior
             if actual_any < anterior_any or (actual_any == anterior_any and actual_mes != anterior_mes + 1):
                 return f"Error: Seqüència incorrecta a la línia {i} - {linia.strip()}"
 
         any_mes_anterior = (actual_any, actual_mes)
+
+    if len(mesos_presentats) != 12:
+        return f"Error: Falten mesos o hi ha mesos duplicats en el fitxer."
 
     return None
 
@@ -63,26 +66,25 @@ with open(fitxer_errors, 'w') as log:
                 with open(ruta_fitxer, 'r') as fitxer:
                     linies = fitxer.readlines()
 
-                # Validar format línia per línia
-                for i, linia in enumerate(linies, start=1):
+                # Validar format línia per línia a partir de la tercera línia
+                for i, linia in enumerate(linies[2:], start=3):
                     linia = linia.strip()
-                    if not validar_format_linia(linia, i):
-                        error_msg = f"Fitxer {arxiu}: Error al format de la línia {i} - {linia}"
+                    if not validar_format_linia(linia):
+                        error_msg = f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} - Fitxer {arxiu}: Error al format de la línia {i} - {linia}"
                         log.write(error_msg + "\n")
                         errors.append(error_msg)
-                        break
 
                 # Validar la seqüència de les dades
                 error_sequencia = validar_sequencia(linies)
                 if error_sequencia:
-                    log.write(f"Fitxer {arxiu}: {error_sequencia}\n")
-                    errors.append(f"Fitxer {arxiu}: {error_sequencia}")
+                    log.write(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} - Fitxer {arxiu}: {error_sequencia}\n")
+                    errors.append(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} - Fitxer {arxiu}: {error_sequencia}")
 
                 # Si totes les línies són correctes
                 else:
                     print(f"Fitxer {arxiu}: Format correcte.")
             except Exception as e:
-                error_msg = f"Fitxer {arxiu}: Error al llegir el fitxer - {e}"
+                error_msg = f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} - Fitxer {arxiu}: Error al llegir el fitxer - {e}"
                 log.write(error_msg + "\n")
                 errors.append(error_msg)
 

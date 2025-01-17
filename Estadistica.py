@@ -2,7 +2,7 @@ import os
 import numpy as np
 
 # Ruta de la carpeta
-folder_path = "PRECIPITACIONS"
+folder_path = "Precipitacions_prova"
 
 # Función para procesar las líneas de datos
 def procesar_lineas(lineas):
@@ -10,7 +10,7 @@ def procesar_lineas(lineas):
     for linea in lineas:
         partes = linea.split()[2:]  # Ignorar las dos primeras columnas
         datos.append([int(dato) if dato != "-999" else np.nan for dato in partes])
-    return np.array(datos)
+    return datos
 
 # Función para calcular estadísticas
 def calcular_estadisticas(datos):
@@ -50,16 +50,24 @@ def calcular_estadisticas(datos):
 
 # Recorrer todos los archivos en la carpeta
 datos_totales = []
+max_length = 0
 for filename in os.listdir(folder_path):
     if filename.endswith(".dat"):
         file_path = os.path.join(folder_path, filename)
         with open(file_path, 'r') as file:
             lineas = file.readlines()[2:]  # Ignorar las dos primeras líneas
             datos = procesar_lineas(lineas)
+            max_length = max(max_length, max(len(d) for d in datos))
             datos_totales.append(datos)
 
-# Concatenar datos de todas las estaciones
-datos_totales = np.concatenate(datos_totales, axis=0)
+# Pad arrays to ensure they have the same number of columns
+for i in range(len(datos_totales)):
+    for j in range(len(datos_totales[i])):
+        if len(datos_totales[i][j]) < max_length:
+            datos_totales[i][j] += [np.nan] * (max_length - len(datos_totales[i][j]))
+
+# Convert to numpy array
+datos_totales = np.array([item for sublist in datos_totales for item in sublist])
 
 # Calcular estadísticas globales
 estadisticas = calcular_estadisticas(datos_totales)
