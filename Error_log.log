@@ -1,2 +1,5 @@
-precip.P6.MIROC5.RCP60.2006-2100.REGRESION.dat: Formato incorrecto en la línea 10
-precip.P12.MIROC5.RCP60.2006-2100.REGRESION.dat: Formato incorrecto en la línea 16
+Registre d'errors en la validació dels fitxers:
+==================================================
+Fitxer precip.P6.MIROC5.RCP60.2006-2100.REGRESION.dat: Error al format de la línia 10 - P6 2006 8 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 rf 0 0 0 0 0 0 0
+Fitxer precip.P12.MIROC5.RCP60.2006-2100.REGRESION.dat: Error al format de la línia 16 - P12 2007 2 0 24 0 0 13 22 100 322 423 300 57 56 18 21 34    gjd  103630181 164 59 34 60 0 0 55 -999 -999 -999
+Fitxer precip.P3.MIROC5.RCP60.2006-2100.REGRESION.dat: Error al format de la línia 1 - precip	MIROC5	RCP60	REGRESION	decimas	1 h
