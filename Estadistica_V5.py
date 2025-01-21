@@ -88,6 +88,10 @@ for any, mesos in precipitacions_totals_per_mes.items():
     mes_mes_plujos = max(mesos, key=mesos.get)
     mes_mes_plujos_per_any[any] = mes_mes_plujos
 
+# Identificar los años más lluviosos y más secos
+any_mes_plujos = max(promig_anual_per_pais, key=promig_anual_per_pais.get)
+any_mes_sec = min(promig_anual_per_pais, key=promig_anual_per_pais.get)
+
 # Imprimir els resultats totals
 print(f"Total nombre de dades: {total_dades}")
 print(f"Total dies sense registre: {total_dies_sense_registre}")
@@ -99,3 +103,5 @@ print(f"Desviació estàndard del percentatge de canvi: {desviacio_estandar:.2f}
 print("Mes més plujós de cada any:")
 for any, mes in sorted(mes_mes_plujos_per_any.items()):
     print(f"  {any}: {mes}")
+print(f"Año más lluvioso: {any_mes_plujos} ({promig_anual_per_pais[any_mes_plujos]:.2f} litros)")
+print(f"Año más seco: {any_mes_sec} ({promig_anual_per_pais[any_mes_sec]:.2f} litros)")
