@@ -51,10 +51,25 @@ percentatge_dies_sense_registre = (total_dies_sense_registre / total_dades) * 10
 # Calcular el promig anual de precipitacions per a tot el país
 promig_anual_per_pais = {any: sum(promigs) / len(promigs) for any, promigs in precipitacions_totals_per_any.items()}
 
+# Calcular el percentatge de canvi any a any
+percentatges_canvi = []
+anys_ordenats = sorted(promig_anual_per_pais.keys())
+for i in range(1, len(anys_ordenats)):
+    any_anterior = anys_ordenats[i - 1]
+    any_actual = anys_ordenats[i]
+    promig_anterior = promig_anual_per_pais[any_anterior]
+    promig_actual = promig_anual_per_pais[any_actual]
+    percentatge_canvi = ((promig_actual - promig_anterior) / promig_anterior) * 100
+    percentatges_canvi.append(percentatge_canvi)
+
+# Calcular la desviació estàndard del percentatge de canvi
+desviacio_estandar = sum(percentatges_canvi) / len(percentatges_canvi) if percentatges_canvi else 0
+
 # Imprimir els resultats totals
 print(f"Total nombre de dades: {total_dades}")
 print(f"Total dies sense registre: {total_dies_sense_registre}")
 print(f"Percentatge de dies sense registre: {percentatge_dies_sense_registre:.2f}%")
-print("Promig anual de precipitacions per a tot el país per dia:")
+print("Promig anual de precipitacions per a tot el país:")
 for any, promig in sorted(promig_anual_per_pais.items()):
-    print(f"  {any}: {promig:.2f} l/dia")
+    print(f"  {any}: {promig:.2f} litres")
+print(f"Desviació estàndard del percentatge de canvi: {desviacio_estandar:.2f}%")
