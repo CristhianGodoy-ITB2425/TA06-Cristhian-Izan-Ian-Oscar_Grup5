@@ -1,7 +1,7 @@
 import os
 
 # Ruta de la carpeta PRECIPITACIONS
-carpeta = "./Precipitacions_prova"
+carpeta = "./PRECIPITACIONS"
 extensio = ".dat"
 
 # Funció per comptar les dades i els dies sense registre
@@ -18,7 +18,7 @@ def comptar_dades_i_dies_sense_registre(ruta_fitxer):
             parts = linia.strip().split()
             any = int(parts[1])
             dades = [int(x) for x in parts[3:] if x != '-999']
-            num_dades += len(dades)
+            num_dades += len(parts[3:])  # Contar todas las columnas de datos
             dies_sense_registre += parts[3:].count('-999')
 
             if any not in precipitacions_per_any:
