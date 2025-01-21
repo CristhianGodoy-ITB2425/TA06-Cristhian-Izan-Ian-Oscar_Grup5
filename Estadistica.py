@@ -1,83 +1,60 @@
 import os
-import numpy as np
 
-# Ruta de la carpeta
-folder_path = "Precipitacions_prova"
+# Ruta de la carpeta PRECIPITACIONS
+carpeta = "./Precipitacions_prova"
+extensio = ".dat"
 
-# Función para procesar las líneas de datos
-def procesar_lineas(lineas):
-    datos = []
-    for linea in lineas:
-        partes = linea.split()[2:]  # Ignorar las dos primeras columnas
-        datos.append([int(dato) if dato != "-999" else np.nan for dato in partes])
-    return datos
+# Funció per comptar les dades i els dies sense registre
+def comptar_dades_i_dies_sense_registre(ruta_fitxer):
+    num_dades = 0
+    dies_sense_registre = 0
+    precipitacions_per_any = {}
 
-# Función para calcular estadísticas
-def calcular_estadisticas(datos):
-    # Calcular el porcentaje de datos faltantes
-    total_datos = datos.size
-    datos_faltantes = np.isnan(datos).sum()
-    porcentaje_faltantes = (datos_faltantes / total_datos) * 100
+    with open(ruta_fitxer, 'r') as fitxer:
+        linies = fitxer.readlines()
 
-    # Reemplazar NaN por 0 para cálculos de estadísticas
-    datos = np.nan_to_num(datos, nan=0)
+        # Processar les línies a partir de la tercera
+        for linia in linies[2:]:
+            parts = linia.strip().split()
+            any = int(parts[1])
+            dades = [int(x) for x in parts[3:] if x != '-999']
+            num_dades += len(dades)
+            dies_sense_registre += parts[3:].count('-999')
 
-    # Calcular estadísticas anuales
-    precipitacion_anual = datos.sum(axis=1)
-    media_anual = datos.mean(axis=1)
+            if any not in precipitacions_per_any:
+                precipitacions_per_any[any] = []
+            precipitacions_per_any[any].extend(dades)
 
-    # Calcular la tendencia de cambio anual
-    tendencia_anual = np.diff(precipitacion_anual)
+    return num_dades, dies_sense_registre, precipitacions_per_any
 
-    # Encontrar los años más plujosos y más secs
-    año_mas_plujoso = np.argmax(precipitacion_anual)
-    año_mas_sec = np.argmin(precipitacion_anual)
+# Variables globals per acumular els resultats
+total_dades = 0
+total_dies_sense_registre = 0
+precipitacions_totals_per_any = {}
 
-    # Calcular estadísticas adicionales
-    max_diario = datos.max(axis=1)
-    min_diario = datos.min(axis=1)
+# Processar tots els fitxers a la carpeta
+for arxiu in os.listdir(carpeta):
+    if arxiu.endswith(extensio):
+        ruta_fitxer = os.path.join(carpeta, arxiu)
+        num_dades, dies_sense_registre, precipitacions_per_any = comptar_dades_i_dies_sense_registre(ruta_fitxer)
+        total_dades += num_dades
+        total_dies_sense_registre += dies_sense_registre
 
-    return {
-        "porcentaje_faltantes": porcentaje_faltantes,
-        "precipitacion_anual": precipitacion_anual,
-        "media_anual": media_anual,
-        "tendencia_anual": tendencia_anual,
-        "año_mas_plujoso": año_mas_plujoso,
-        "año_mas_sec": año_mas_sec,
-        "max_diario": max_diario,
-        "min_diario": min_diario
-    }
+        for any, precipitacions in precipitacions_per_any.items():
+            if any not in precipitacions_totals_per_any:
+                precipitacions_totals_per_any[any] = []
+            precipitacions_totals_per_any[any].append(sum(precipitacions) / len(precipitacions))
 
-# Recorrer todos los archivos en la carpeta
-datos_totales = []
-max_length = 0
-for filename in os.listdir(folder_path):
-    if filename.endswith(".dat"):
-        file_path = os.path.join(folder_path, filename)
-        with open(file_path, 'r') as file:
-            lineas = file.readlines()[2:]  # Ignorar las dos primeras líneas
-            datos = procesar_lineas(lineas)
-            max_length = max(max_length, max(len(d) for d in datos))
-            datos_totales.append(datos)
+# Calcular el percentatge de dies sense registre
+percentatge_dies_sense_registre = (total_dies_sense_registre / total_dades) * 100 if total_dades > 0 else 0
 
-# Pad arrays to ensure they have the same number of columns
-for i in range(len(datos_totales)):
-    for j in range(len(datos_totales[i])):
-        if len(datos_totales[i][j]) < max_length:
-            datos_totales[i][j] += [np.nan] * (max_length - len(datos_totales[i][j]))
+# Calcular el promig anual de precipitacions per a tot el país
+promig_anual_per_pais = {any: sum(promigs) / len(promigs) for any, promigs in precipitacions_totals_per_any.items()}
 
-# Convert to numpy array
-datos_totales = np.array([item for sublist in datos_totales for item in sublist])
-
-# Calcular estadísticas globales
-estadisticas = calcular_estadisticas(datos_totales)
-
-# Mostrar resultados
-print(f"Porcentaje de datos faltantes: {estadisticas['porcentaje_faltantes']:.2f}%")
-print(f"Precipitación total anual: {estadisticas['precipitacion_anual']}")
-print(f"Media anual de precipitaciones: {estadisticas['media_anual']}")
-print(f"Tendencia anual de cambio: {estadisticas['tendencia_anual']}")
-print(f"Año más plujoso: {estadisticas['año_mas_plujoso']}")
-print(f"Año más seco: {estadisticas['año_mas_sec']}")
-print(f"Máximo diario por año: {estadisticas['max_diario']}")
-print(f"Mínimo diario por año: {estadisticas['min_diario']}")
+# Imprimir els resultats totals
+print(f"Total nombre de dades: {total_dades}")
+print(f"Total dies sense registre: {total_dies_sense_registre}")
+print(f"Percentatge de dies sense registre: {percentatge_dies_sense_registre:.2f}%")
+print("Promig anual de precipitacions per a tot el país:")
+for any, promig in sorted(promig_anual_per_pais.items()):
+    print(f"  {any}: {promig:.2f} litres")

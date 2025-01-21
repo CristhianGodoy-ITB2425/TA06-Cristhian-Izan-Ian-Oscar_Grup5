@@ -11,7 +11,7 @@ import pandas as pd
 
 
 # Ruta de la carpeta PRECIPITACIONS
-carpeta = "./PRECIPITACIONS"
+carpeta = "./Precipitacions_prova"
 extensio = ".dat"
 
 # Fitxer de log d'errors
