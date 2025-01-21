@@ -98,10 +98,10 @@ print(f"Total dies sense registre: {total_dies_sense_registre}")
 print(f"Percentatge de dies sense registre: {percentatge_dies_sense_registre:.2f}%")
 print("Promig anual de precipitacions per a tot el país:")
 for any, promig in sorted(promig_anual_per_pais.items()):
-    print(f"  {any}: {promig:.2f} litres")
+    print(f"  {any}: {promig:.2f} l/dia")
 print(f"Desviació estàndard del percentatge de canvi: {desviacio_estandar:.2f}%")
 print("Mes més plujós de cada any:")
 for any, mes in sorted(mes_mes_plujos_per_any.items()):
     print(f"  {any}: {mes}")
-print(f"Año más lluvioso: {any_mes_plujos} ({promig_anual_per_pais[any_mes_plujos]:.2f} litros)")
-print(f"Año más seco: {any_mes_sec} ({promig_anual_per_pais[any_mes_sec]:.2f} litros)")
+print(f"Año más lluvioso: {any_mes_plujos} ({promig_anual_per_pais[any_mes_plujos]:.2f} l/dia)")
+print(f"Año más seco: {any_mes_sec} ({promig_anual_per_pais[any_mes_sec]:.2f} l/dia)")
