@@ -55,6 +55,6 @@ promig_anual_per_pais = {any: sum(promigs) / len(promigs) for any, promigs in pr
 print(f"Total nombre de dades: {total_dades}")
 print(f"Total dies sense registre: {total_dies_sense_registre}")
 print(f"Percentatge de dies sense registre: {percentatge_dies_sense_registre:.2f}%")
-print("Promig anual de precipitacions per a tot el país:")
+print("Promig anual de precipitacions per a tot el país per dia:")
 for any, promig in sorted(promig_anual_per_pais.items()):
     print(f"  {any}: {promig:.2f} litres")
