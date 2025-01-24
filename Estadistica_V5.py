@@ -10,7 +10,6 @@ def comptar_dades_i_dies_sense_registre(ruta_fitxer):
     dies_sense_registre = 0
     precipitacions_per_any = {}
     precipitacions_per_mes = {}
-    dia_mes_plujos = (None, 0)  # (date, precipitation)
 
     with open(ruta_fitxer, 'r') as fitxer:
         linies = fitxer.readlines()
@@ -20,10 +19,9 @@ def comptar_dades_i_dies_sense_registre(ruta_fitxer):
             parts = linia.strip().split()
             any = int(parts[1])
             mes = int(parts[2])
-            dia = int(parts[3])
-            dades = [int(x) for x in parts[4:] if x != '-999']
-            num_dades += len(parts[4:])  # Contar todas las columnas de datos
-            dies_sense_registre += parts[4:].count('-999')
+            dades = [int(x) for x in parts[3:] if x != '-999']
+            num_dades += len(parts[3:])  # Contar todas las columnas de datos
+            dies_sense_registre += parts[3:].count('-999')
 
             if any not in precipitacions_per_any:
                 precipitacions_per_any[any] = []
@@ -35,25 +33,19 @@ def comptar_dades_i_dies_sense_registre(ruta_fitxer):
                 precipitacions_per_mes[any][mes] = 0
             precipitacions_per_mes[any][mes] += sum(dades)
 
-            # Check for the rainiest day
-            total_precipitacio = sum(dades)
-            if total_precipitacio > dia_mes_plujos[1]:
-                dia_mes_plujos = ((any, mes, dia), total_precipitacio)
-
-    return num_dades, dies_sense_registre, precipitacions_per_any, precipitacions_per_mes, dia_mes_plujos
+    return num_dades, dies_sense_registre, precipitacions_per_any, precipitacions_per_mes
 
 # Variables globals per acumular els resultats
 total_dades = 0
 total_dies_sense_registre = 0
 precipitacions_totals_per_any = {}
 precipitacions_totals_per_mes = {}
-dia_mes_plujos_global = (None, 0)  # (date, precipitation)
 
 # Processar tots els fitxers a la carpeta
 for arxiu in os.listdir(carpeta):
     if arxiu.endswith(extensio):
         ruta_fitxer = os.path.join(carpeta, arxiu)
-        num_dades, dies_sense_registre, precipitacions_per_any, precipitacions_per_mes, dia_mes_plujos = comptar_dades_i_dies_sense_registre(ruta_fitxer)
+        num_dades, dies_sense_registre, precipitacions_per_any, precipitacions_per_mes = comptar_dades_i_dies_sense_registre(ruta_fitxer)
         total_dades += num_dades
         total_dies_sense_registre += dies_sense_registre
 
@@ -69,10 +61,6 @@ for arxiu in os.listdir(carpeta):
                 if mes not in precipitacions_totals_per_mes[any]:
                     precipitacions_totals_per_mes[any][mes] = 0
                 precipitacions_totals_per_mes[any][mes] += precipitacio
-
-        # Update the global rainiest day
-        if dia_mes_plujos[1] > dia_mes_plujos_global[1]:
-            dia_mes_plujos_global = dia_mes_plujos
 
 # Calcular el percentatge de dies sense registre
 percentatge_dies_sense_registre = (total_dies_sense_registre / total_dades) * 100 if total_dades > 0 else 0
@@ -115,6 +103,5 @@ print(f"Desviació estàndard del percentatge de canvi: {desviacio_estandar:.2f}
 print("Mes més plujós de cada any:")
 for any, mes in sorted(mes_mes_plujos_per_any.items()):
     print(f"  {any}: {mes}")
-print(f"Dia més plujós: {dia_mes_plujos_global[0][2]}/{dia_mes_plujos_global[0][1]}/{dia_mes_plujos_global[0][0]} ({dia_mes_plujos_global[1]} litres)")
 print(f"Año más lluvioso: {any_mes_plujos} ({promig_anual_per_pais[any_mes_plujos]:.2f} litros)")
 print(f"Año más seco: {any_mes_sec} ({promig_anual_per_pais[any_mes_sec]:.2f} litros)")
