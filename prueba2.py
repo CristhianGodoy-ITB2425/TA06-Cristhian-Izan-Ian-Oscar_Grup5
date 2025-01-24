@@ -10,7 +10,6 @@ def comptar_dades_i_dies_sense_registre(ruta_fitxer):
     dies_sense_registre = 0
     precipitacions_per_any = {}
     precipitacions_per_mes = {}
-    precipitacions_per_estacio = {}
 
     with open(ruta_fitxer, 'r') as fitxer:
         linies = fitxer.readlines()
@@ -18,7 +17,6 @@ def comptar_dades_i_dies_sense_registre(ruta_fitxer):
         # Processar les línies a partir de la tercera
         for linia in linies[2:]:
             parts = linia.strip().split()
-            estacio = parts[0]
             any = int(parts[1])
             mes = int(parts[2])
             dades = [int(x) for x in parts[3:] if x != '-999']
@@ -35,26 +33,19 @@ def comptar_dades_i_dies_sense_registre(ruta_fitxer):
                 precipitacions_per_mes[any][mes] = 0
             precipitacions_per_mes[any][mes] += sum(dades)
 
-            if any not in precipitacions_per_estacio:
-                precipitacions_per_estacio[any] = {}
-            if estacio not in precipitacions_per_estacio[any]:
-                precipitacions_per_estacio[any][estacio] = 0
-            precipitacions_per_estacio[any][estacio] += sum(dades)
-
-    return num_dades, dies_sense_registre, precipitacions_per_any, precipitacions_per_mes, precipitacions_per_estacio
+    return num_dades, dies_sense_registre, precipitacions_per_any, precipitacions_per_mes
 
 # Variables globals per acumular els resultats
 total_dades = 0
 total_dies_sense_registre = 0
 precipitacions_totals_per_any = {}
 precipitacions_totals_per_mes = {}
-precipitacions_totals_per_estacio = {}
 
 # Processar tots els fitxers a la carpeta
 for arxiu in os.listdir(carpeta):
     if arxiu.endswith(extensio):
         ruta_fitxer = os.path.join(carpeta, arxiu)
-        num_dades, dies_sense_registre, precipitacions_per_any, precipitacions_per_mes, precipitacions_per_estacio = comptar_dades_i_dies_sense_registre(ruta_fitxer)
+        num_dades, dies_sense_registre, precipitacions_per_any, precipitacions_per_mes = comptar_dades_i_dies_sense_registre(ruta_fitxer)
         total_dades += num_dades
         total_dies_sense_registre += dies_sense_registre
 
@@ -70,14 +61,6 @@ for arxiu in os.listdir(carpeta):
                 if mes not in precipitacions_totals_per_mes[any]:
                     precipitacions_totals_per_mes[any][mes] = 0
                 precipitacions_totals_per_mes[any][mes] += precipitacio
-
-        for any, estacions in precipitacions_per_estacio.items():
-            if any not in precipitacions_totals_per_estacio:
-                precipitacions_totals_per_estacio[any] = {}
-            for estacio, precipitacio in estacions.items():
-                if estacio not in precipitacions_totals_per_estacio[any]:
-                    precipitacions_totals_per_estacio[any][estacio] = 0
-                precipitacions_totals_per_estacio[any][estacio] += precipitacio
 
 # Calcular el percentatge de dies sense registre
 percentatge_dies_sense_registre = (total_dies_sense_registre / total_dades) * 100 if total_dades > 0 else 0
@@ -105,12 +88,6 @@ for any, mesos in precipitacions_totals_per_mes.items():
     mes_mes_plujos = max(mesos, key=mesos.get)
     mes_mes_plujos_per_any[any] = mes_mes_plujos
 
-# Calcular la estació més plujosa de cada any
-estacio_mes_plujosa_per_any = {}
-for any, estacions in precipitacions_totals_per_estacio.items():
-    estacio_mes_plujosa = max(estacions, key=estacions.get)
-    estacio_mes_plujosa_per_any[any] = estacio_mes_plujosa
-
 # Identificar los años más lluviosos y más secos
 any_mes_plujos = max(promig_anual_per_pais, key=promig_anual_per_pais.get)
 any_mes_sec = min(promig_anual_per_pais, key=promig_anual_per_pais.get)
@@ -126,8 +103,5 @@ print(f"Desviació estàndard del percentatge de canvi: {desviacio_estandar:.2f}
 print("Mes més plujós de cada any:")
 for any, mes in sorted(mes_mes_plujos_per_any.items()):
     print(f"  {any}: {mes}")
-print("Estació més plujosa de cada any:")
-for any, estacio in sorted(estacio_mes_plujosa_per_any.items()):
-    print(f"  {any}: {estacio}")
 print(f"Año más lluvioso: {any_mes_plujos} ({promig_anual_per_pais[any_mes_plujos]:.2f} litros)")
 print(f"Año más seco: {any_mes_sec} ({promig_anual_per_pais[any_mes_sec]:.2f} litros)")
