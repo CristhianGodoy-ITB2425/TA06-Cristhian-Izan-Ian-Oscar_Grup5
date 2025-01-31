@@ -1,6 +1,8 @@
 import os
 import re
 from datetime import datetime
+import pandas as pd
+import matplotlib.pyplot as plt
 
 # Ruta de la carpeta PRECIPITACIONS
 carpeta = "./PRECIPITACIONS"
@@ -98,11 +100,7 @@ if errors:
     print("Errors detectats. Consulta el fitxer Error_log.log per més detalls.")
 else:
     print("Tots els fitxers tenen el format correcte.")
-import os
-import re
-from datetime import datetime
-import pandas as pd
-import matplotlib.pyplot as plt
+
 
 # Ruta de la carpeta PRECIPITACIONS
 carpeta = "./PRECIPITACIONS"
