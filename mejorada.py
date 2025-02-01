@@ -198,7 +198,10 @@ percentatge_dies_sense_registre = (total_dies_sense_registre / total_dades) * 10
 promig_anual_per_pais = {}
 for any, promigs in precipitacions_totals_per_any.items():
     total_precipitacions = sum(promigs)
-    promig_anual = total_precipitacions / 372  # Dividir por 365 días en lugar de la cantidad de datos
+    # Verificar si el año es bisiesto
+    es_bisiesto = (any % 4 == 0 and any % 100 != 0) or (any % 400 == 0)
+    dias_en_el_ano = 366 if es_bisiesto else 365
+    promig_anual = total_precipitacions / dias_en_el_ano
     promig_anual_per_pais[any] = promig_anual
 
 # Calcular el percentatge de canvi any a any
