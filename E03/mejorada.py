@@ -288,8 +288,8 @@ print(f"Año más lluvioso: {any_mes_plujos} ({promig_anual_per_pais[any_mes_plu
 print(f"Año más seco: {any_mes_sec} ({promig_anual_per_pais[any_mes_sec]:.2f} litros)")
 import csv
 
-# Crear un DataFrame con los resultados
-resultados = {
+# Datos para el primer archivo .csv
+datos_resumen = {
     "Total nombre de dades": [total_dades],
     "Total dies sense registre": [total_dies_sense_registre],
     "Percentatge de dies sense registre": [percentatge_dies_sense_registre],
@@ -300,23 +300,25 @@ resultados = {
     "Precipitaciones año más seco": [promig_anual_per_pais[any_mes_sec]]
 }
 
-# Añadir el promedio anual de precipitaciones por año
-for any, promig in sorted(promig_anual_per_pais.items()):
-    resultados[f"Promig anual {any}"] = [promig]
+# Crear un DataFrame de Pandas para el primer archivo
+df_resumen = pd.DataFrame(datos_resumen)
 
-# Añadir el mes más plujoso de cada año
-for any, mes in sorted(mes_mes_plujos_per_any.items()):
-    resultados[f"Mes més plujós {any}"] = [mes]
+# Guardar el DataFrame en el primer archivo .csv
+df_resumen.to_csv("resumen_estadistico_1.csv", index=False)
 
-# Añadir la estación más plujosa de cada año
-for any, estacio in sorted(estacio_mes_plujosa_per_any.items()):
-    resultados[f"Estació més plujosa {any}"] = [estacio]
+# Datos para el segundo archivo .csv
+datos_detallados = {
+    "Año": list(promig_anual_per_pais.keys()),
+    "Promedio anual de precipitaciones": list(promig_anual_per_pais.values()),
+    "Mes más plujoso": [mes_mes_plujos_per_any[any] for any in promig_anual_per_pais.keys()],
+    "Estación más plujosa": [estacio_mes_plujosa_per_any[any] for any in promig_anual_per_pais.keys()]
+}
 
-# Crear un DataFrame de Pandas
-df_resultados = pd.DataFrame(resultados)
+# Crear un DataFrame de Pandas para el segundo archivo
+df_detallados = pd.DataFrame(datos_detallados)
 
-# Guardar el DataFrame en un archivo .csv
-df_resultados.to_csv("resumen_estadistico.csv", index=False)
+# Guardar el DataFrame en el segundo archivo .csv
+df_detallados.to_csv("resumen_estadistico_2.csv", index=False)
 
 # Mostrar els resultats en una nova finestra amb un gràfic
 mostrar_resultats()

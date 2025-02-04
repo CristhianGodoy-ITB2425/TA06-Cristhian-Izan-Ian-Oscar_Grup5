@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV Data Display</title>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+    <a id="top"></a>
+    <nav>
+        <ul>
+            <li><a href="#resumen1">Dades</a></li>
+            <li><a href="#resumen2">Precipitacions</a></li>
+            <li><a href="#grafic">Gràfic</a></li>
+        </ul>
+    </nav>
+
+    <section id="resumen1">
+        <h1>Dades</h1>
+        <table></table>
+    </section>
+
+    <section id="resumen2">
+        <h1>Precipitacions</h1>
+        <table></table>
+    </section>
+<center>
+    <section id="grafic">
+        <h1>Gràfic</h1>
+        <br>
+        <br>
+        <img src="./../E03/resumen_estadistico.png" alt="Grafic" width="960px" height="720px">
+    </section>
+    </center>
+
+    <button id="backToTop" onclick="scrollToTop()">⬆️</button>
+
+    <script>
+        async function fetchCSV(file) {
+            const response = await fetch(file);
+            const data = await response.text();
+            return data;
+        }
+
+        function parseCSV(data) {
+            const rows = data.split('\n').map(row => row.split(','));
+            return rows;
+        }
+
+        function generateTable(sectionId, data) {
+            const section = document.getElementById(sectionId);
+            const table = section.querySelector('table');
+            const headerRow = document.createElement('tr');
+            data[0].forEach(header => {
+                const th = document.createElement('th');
+                th.textContent = header;
+                headerRow.appendChild(th);
+            });
+            table.appendChild(headerRow);
+
+            data.slice(1).forEach(row => {
+                const tr = document.createElement('tr');
+                row.forEach(cell => {
+                    const td = document.createElement('td');
+                    td.textContent = cell;
+                    tr.appendChild(td);
+                });
+                table.appendChild(tr);
+            });
+        }
+
+        async function loadCSVData() {
+            const resumen1Data = await fetchCSV('./../E03/resumen_estadistico_1.csv');
+            const resumen2Data = await fetchCSV('./../E03/resumen_estadistico_2.csv');
+
+            const parsedResumen1 = parseCSV(resumen1Data);
+            const parsedResumen2 = parseCSV(resumen2Data);
+
+            generateTable('resumen1', parsedResumen1);
+            generateTable('resumen2', parsedResumen2);
+        }
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        loadCSVData();
+    </script>
+</body>
+</html>
