@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="language" content="Spanish">
+    <title>Estadísticas Meteorológicas España</title>
+    <link rel="stylesheet" href="estilos.css">
+    <link rel="javascript" href="script.js">
+</head>
+<body>
+    <div class="header">
+        <div class="institute-name">Institut Tecnologic de Barcelona</div>
+        <div class="group-number">Grupo 5</div>
+    </div>
+
+    <div class="weather-container">
+        <div class="location">España</div>
+        <div class="description">
+            Somos un grupo de estudiantes universitarios dedicados al análisis y seguimiento de patrones meteorológicos en España. A través de esta plataforma, compartimos nuestros estudios estadísticos sobre las precipitaciones y sus variaciones a lo largo del tiempo.
+        </div>
+
+        <div class="file-input">
+            <label for="csvFile" class="file-label">Seleccionar archivo CSV del proyecto TA06</label>
+            <input type="file" id="csvFile" accept=".csv" />
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">Resumen de Lluvias</div>
+            <div class="rain-stats">
+                <div class="stat-box">
+                    <div class="stat-value" id="lluvia-mensual">--</div>
+                    <div class="stat-label">Lluvia Mensual Promedio</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="lluvia-anual">--</div>
+                    <div class="stat-label">Lluvia Anual Promedio</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="dias-lluvia">--</div>
+                    <div class="stat-label">Días de Lluvia Promedio</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="tendencia">--</div>
+                    <div class="stat-label">Tendencia vs 2006</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">
+                Estadísticas de Lluvia
+                <select id="yearSelector" class="year-selector">
+                    <option value="">Seleccione un año</option>
+                </select>
+            </div>
+            <div class="graph-container" id="rainfall-graph">
+                <div class="graph-label">mm de lluvia</div>
+                <!-- Las barras se generarán dinámicamente -->
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
