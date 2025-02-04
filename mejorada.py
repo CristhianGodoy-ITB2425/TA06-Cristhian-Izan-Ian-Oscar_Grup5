@@ -5,7 +5,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # Ruta de la carpeta PRECIPITACIONS
-carpeta = "./PRECIPITACIONS"
+carpeta = "./Precipitacions_prova"
 extensio = ".dat"
 
 # Fitxer de log d'errors
@@ -267,6 +267,7 @@ def mostrar_resultats():
     axs[1, 1].set_title("Estació més plujosa de cada any")
 
     plt.tight_layout()
+    plt.savefig("resumen_estadistico.png")
     plt.show()
 
 # Imprimir els resultats totals
