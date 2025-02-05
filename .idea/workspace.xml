@@ -4,17 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f4225f87-e5ea-450d-a2ce-61019848d2f2" name="Changes" comment="Cristhian">
-      <change afterPath="$PROJECT_DIR$/E04/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/E03/estilos.css" beforeDir="false" afterPath="$PROJECT_DIR$/E04/estilos.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/E03/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/E03/mejorada.py" beforeDir="false" afterPath="$PROJECT_DIR$/E03/mejorada.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/E03/resumen_estadistico.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/E03/resumen_estadistico.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/E03/script.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/E03/web.html" beforeDir="false" />
-    </list>
+    <list default="true" id="f4225f87-e5ea-450d-a2ce-61019848d2f2" name="Changes" comment="Cristhian" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -32,7 +22,7 @@
   <component name="GithubPullRequestsUISettings"><![CDATA[{
   "selectedUrlAndAccountId": {
     "url": "https://github.com/CristhianGodoy-ITB2425/TA06-Cristhian-Izan-Ian-Oscar_Grup5.git",
-    "accountId": "c29db520-6c89-4a76-be51-122f774d5075"
+    "accountId": "1a16a392-0688-4d0f-9b41-8b67be7d3b7a"
   }
 }]]></component>
   <component name="ProjectColorInfo">{
