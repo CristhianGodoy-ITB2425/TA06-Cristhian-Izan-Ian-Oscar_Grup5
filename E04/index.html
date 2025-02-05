@@ -30,7 +30,7 @@
         <h1>Gràfic</h1>
         <br>
         <br>
-        <img src="./../E03/resumen_estadistico.png" alt="Grafic" width="960px" height="720px">
+        <img src="./E03/resumen_estadistico.png" alt="Grafic" width="960px" height="720px">
     </section>
     </center>
 
@@ -71,8 +71,8 @@
         }
 
         async function loadCSVData() {
-            const resumen1Data = await fetchCSV('./../E03/resumen_estadistico_1.csv');
-            const resumen2Data = await fetchCSV('./../E03/resumen_estadistico_2.csv');
+            const resumen1Data = await fetchCSV('./E03/resumen_estadistico_1.csv');
+            const resumen2Data = await fetchCSV('./E03/resumen_estadistico_2.csv');
 
             const parsedResumen1 = parseCSV(resumen1Data);
             const parsedResumen2 = parseCSV(resumen2Data);
